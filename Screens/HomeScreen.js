@@ -1,21 +1,20 @@
 import React from 'react'
 import { Button, StyleSheet, Text, View } from 'react-native'
+import { useNavigation } from '@react-navigation/core'
 
 const HomeScreen = () => {
+  const navigation = useNavigation()
     return (
         
             <View style={styles.container}>
                 <Text>Home Screen</Text>
                 <Button title='Register as new user?'
                     onPress={() => navigation.navigate('RegistationScreen')}/>
-
                 
                 <Button title='Login to my account!'
                     onPress={() => navigation.navigate('LoginScreen')}/>
                 
             </View>
-       
-       
     )
 }
 

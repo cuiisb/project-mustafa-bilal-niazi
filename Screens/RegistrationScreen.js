@@ -1,7 +1,24 @@
 import React from 'react'
 import { KeyboardAvoidingView,StyleSheet, Text, TextInput, View } from 'react-native'
+import { useNavigation } from '@react-navigation/core'
+import { auth } from '../firebase'
 
 const RegistrationScreen = () => {
+  const navigation = useNavigation()
+
+  const [getusername, setusername] = useState('')
+  const [getpassword, setpassword] = useState('')
+
+  const handleSignUp = () => {
+    auth
+      .createUserWithEmailAndPassword(getusername, getpassword)
+      .then(userCredentials => {
+        const user = userCredentials.user;
+        console.log('Registered with:', user.getusername);
+      })
+      .catch(error => alert(error.message))
+  }
+
     return (
         <KeyboardAvoidingView style={styles.container}
         behavior='padding'>
@@ -9,15 +26,29 @@ const RegistrationScreen = () => {
                 <Text>Home Screen</Text>
                 <TextInput
                 placeholder='Email'
-                value={}
-                onChangeText={}
+                style={styles.style1}
+                value={getusername}
+                onChangeText={text=> setusername(text)}
+                style={styles.input}
                 />
                 <TextInput
                 placeholder='Password'
-                value={}
-                onChangeText={}
+                style={styles.style1}
+                value={getpassword}
+                onChangeText={text=> setpassword(text)}
+                style={styles.input}
+                secureTextEntry
                 />
 
+            <View>
+              <TouchableOpacity
+              onPress={handleSignUp}
+              style={styles.style1}>
+                <Text>
+                  Register!
+                </Text>
+              </TouchableOpacity>
+            </View>
                 
             </View>
         </KeyboardAvoidingView>
@@ -32,6 +63,13 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    input: {
+      backgroundColor: 'white',
+      paddingHorizontal: 15,
+      paddingVertical: 10,
+      borderRadius: 10,
+      marginTop: 5,
     },
     style1: {
         borderBottomWidth: 2,

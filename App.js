@@ -2,7 +2,6 @@ import { StatusBar } from 'expo-status-bar';
 import {TouchableOpacity, ScrollView, Text, View, StyleSheet,Button } from 'react-native';
 import React from'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './Screens/HomeScreen';
 import LoginScreen from './Screens/LoginScreen';
@@ -16,7 +15,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} options={{
-      title: 'DISCOUNT APP',
+      title: 'Saath Sawaar!',
       headerStyle: {
         backgroundColor: 'seagreen',
       },
@@ -26,7 +25,7 @@ export default function App() {
       },
       }} />
         <Stack.Screen name="Registration" component={RegistrationScreen} options={{
-      title: 'DISCOUNT APP',
+      title: 'Register as a sawaar!',
       headerStyle: {
         backgroundColor: 'seagreen',
       },
@@ -36,7 +35,7 @@ export default function App() {
       },
       }}/>
         <Stack.Screen name="Login" component={LoginScreen} options={{
-      title: 'DISCOUNT APP',
+      title: 'Welcome back sawaar!',
       headerStyle: {
         backgroundColor: 'seagreen',
       },
@@ -46,7 +45,7 @@ export default function App() {
       },
       }}/>
         <Stack.Screen name="Service" component={ServiceScreen} options={{
-      title: 'DISCOUNT APP',
+      title: 'Sawaari services',
       headerStyle: {
         backgroundColor: 'seagreen',
       },
