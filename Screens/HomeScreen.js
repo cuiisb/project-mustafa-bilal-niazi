@@ -1,18 +1,38 @@
 import React from 'react'
-import { Button, StyleSheet, Text, View } from 'react-native'
+import { TouchableOpacity,Button, StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/core'
+import { app } from '../firebase'
 
 const HomeScreen = () => {
+
   const navigation = useNavigation()
+
     return (
         
             <View style={styles.container}>
-                <Text>Home Screen</Text>
-                <Button title='Register as new user?'
-                    onPress={() => navigation.navigate('RegistationScreen')}/>
-                
-                <Button title='Login to my account!'
-                    onPress={() => navigation.navigate('LoginScreen')}/>
+                <Text style={styles.italic}>Hey! </Text>
+                <Text style={styles.italic}>looking for a sawaari?</Text>
+                <Text style={styles.italic}>and</Text>
+                <Text style={styles.italic}>Dont have an account?</Text>
+                <Text style={styles.italic}>Register now!</Text>
+                <View style={styles.buttonContainer}>
+                <TouchableOpacity
+              onPress={() => navigation.navigate('Registration')}
+              style={[styles.button2,styles.buttonOutline,{marginTop:20}]}>
+                <Text style={styles.buttonText}>
+                  Register!
+                </Text>
+              </TouchableOpacity>
+              <Text style={styles.italic}>Or login to your account!</Text>
+              <TouchableOpacity
+              onPress={() => navigation.navigate('Login')}
+              style={[styles.button2,styles.buttonOutline,{marginTop:20}]}>
+                <Text style={styles.buttonText}>
+                  Login!
+                </Text>
+              </TouchableOpacity>
+                </View>
+           
                 
             </View>
     )
@@ -26,6 +46,10 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    italic: {
+      fontStyle: 'italic',
+      fontSize: 28,
     },
     style1: {
         borderBottomWidth: 2,
@@ -53,5 +77,34 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         borderRadius: 50,
         textAlign: 'center'
-      }
+      },
+      buttonContainer: {
+        width: '60%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 40,
+      },
+      button2: {
+        backgroundColor: 'green',
+        width: '100%',
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+      },
+      buttonOutline: {
+        backgroundColor: 'green',
+        marginTop: 5,
+        borderColor: 'goldenrod',
+        borderWidth: 2,
+      },
+      buttonText: {
+        color: 'white',
+        fontWeight: '700',
+        fontSize: 16,
+      },
+      buttonOutlineText: {
+        color: '#0782F9',
+        fontWeight: '700',
+        fontSize: 16,
+      },
   });

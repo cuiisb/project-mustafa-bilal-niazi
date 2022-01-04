@@ -1,21 +1,22 @@
 import React, { useState } from 'react'
-import { KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native'
+import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/core'
-import { auth } from '../firebase'
+import { app } from '../firebase'
 
 const LoginScreen = () => {
   const navigation = useNavigation()
 
-  const [getusername, setusername] = useState('')
+  const [getemail, setemail] = useState('')
   const [getpassword, setpassword] = useState('')
 
   const handleLogin = () => {
-    auth
-      .signInWithEmailAndPassword(getusername, getpassword)
+    app
+      .signInWithEmailAndPassword(getemail, getpassword)
       .then(userCredentials => {
         const user = userCredentials.user;
-        console.log('Logged in with:', user.getusername);
+        {() => navigation.navigate('Service')}
+        console.log('Logged in with:', user.getemail);
       })
       .catch(error => alert(error.message))
   }
@@ -24,29 +25,39 @@ const LoginScreen = () => {
         <KeyboardAvoidingView style={styles.container}
         behavior='padding'>
             <View>
-                <Text>Home Screen</Text>
+                
                 <TextInput
-                placeholder='Username'
-                value={getusername}
-                onChangeText={text=> setusername(text)}
+                placeholder='email'
+                value={getemail}
+                onChangeText={text=> setemail(text)}
                 style={styles.input}
                 />
                 <TextInput
                 placeholder='Password'
                 value={getpassword}
-                onChangeText={ext=> setpassword(text)}
+                onChangeText={text=> setpassword(text)}
                 style={styles.input}
                 />
             </View>
             
             <View>
               <TouchableOpacity
-              onPress={handleLogin}
-              style={styles.style1}>
-                <Text>
+               onPress={() => navigation.navigate('Service')}
+              style={[styles.button2,styles.buttonOutline,{marginTop:20}]}>
+                <Text  style={styles.buttonText}>
                   Login!
                 </Text>
               </TouchableOpacity>
+              <View style={styles.extra}>
+            <Text >don't have an account? </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Registration')}
+              >
+                <Text style={styles.style1}>
+                  Register!
+                </Text>
+              </TouchableOpacity>
+            </View>
             </View>
 
         </KeyboardAvoidingView>
@@ -71,7 +82,8 @@ const styles = StyleSheet.create({
     },
     style1: {
         borderBottomWidth: 2,
-        paddingTop: 20
+        fontStyle: 'italic',
+        
       },
       style2: {
         paddingTop: 30,
@@ -95,5 +107,38 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         borderRadius: 50,
         textAlign: 'center'
-      }
+      },
+      buttonContainer: {
+        width: '60%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 40,
+      },
+      button2: {
+        backgroundColor: 'green',
+        width: '100%',
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+      },
+      buttonOutline: {
+        backgroundColor: 'green',
+        marginTop: 5,
+        borderColor: 'goldenrod',
+        borderWidth: 2,
+      },
+      buttonText: {
+        color: 'white',
+        fontWeight: '700',
+        fontSize: 16,
+      },
+      buttonOutlineText: {
+        color: '#0782F9',
+        fontWeight: '700',
+        fontSize: 16,
+      },
+      extra: {
+        flexDirection: 'row',
+        paddingTop: 10,
+      },
   });

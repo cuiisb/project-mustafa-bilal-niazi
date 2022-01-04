@@ -1,20 +1,21 @@
-import React from 'react'
-import { KeyboardAvoidingView,StyleSheet, Text, TextInput, View } from 'react-native'
+import React, {useState} from 'react'
+import { TouchableOpacity, KeyboardAvoidingView,StyleSheet, Text, TextInput, View } from 'react-native'
 import { useNavigation } from '@react-navigation/core'
-import { auth } from '../firebase'
+import { app } from '../firebase'
 
 const RegistrationScreen = () => {
   const navigation = useNavigation()
 
-  const [getusername, setusername] = useState('')
+  const [getemail, setemail] = useState('')
   const [getpassword, setpassword] = useState('')
 
   const handleSignUp = () => {
-    auth
-      .createUserWithEmailAndPassword(getusername, getpassword)
+    app
+      .createUserWithEmailAndPassword(getemail, getpassword)
       .then(userCredentials => {
         const user = userCredentials.user;
-        console.log('Registered with:', user.getusername);
+        {() => navigation.navigate('Service')}
+        console.log('Registered with:', user.getemail);
       })
       .catch(error => alert(error.message))
   }
@@ -23,12 +24,12 @@ const RegistrationScreen = () => {
         <KeyboardAvoidingView style={styles.container}
         behavior='padding'>
             <View>
-                <Text>Home Screen</Text>
+                
                 <TextInput
-                placeholder='Email'
+                placeholder='email'
                 style={styles.style1}
-                value={getusername}
-                onChangeText={text=> setusername(text)}
+                value={getemail}
+                onChangeText={text=> setemail(text)}
                 style={styles.input}
                 />
                 <TextInput
@@ -42,14 +43,24 @@ const RegistrationScreen = () => {
 
             <View>
               <TouchableOpacity
-              onPress={handleSignUp}
-              style={styles.style1}>
-                <Text>
+              onPress={() => navigation.navigate('Service')}
+              style={[styles.button2,styles.buttonOutline,{marginTop:20}]}>
+                <Text style={styles.buttonText}>
                   Register!
                 </Text>
               </TouchableOpacity>
             </View>
-                
+            <View style={styles.extra}>
+            <Text >already have an account? </Text>
+            <TouchableOpacity
+                onPress={() => navigation.navigate('Login')}
+            >
+                <Text style={styles.style1}>
+                  Login!
+                </Text>
+              </TouchableOpacity>
+            </View>
+            
             </View>
         </KeyboardAvoidingView>
     )
@@ -73,7 +84,8 @@ const styles = StyleSheet.create({
     },
     style1: {
         borderBottomWidth: 2,
-        paddingTop: 20
+        fontStyle: 'italic',
+        
       },
       style2: {
         paddingTop: 30,
@@ -97,5 +109,38 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         borderRadius: 50,
         textAlign: 'center'
-      }
+      },
+      buttonContainer: {
+        width: '60%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 40,
+      },
+      button2: {
+        backgroundColor: 'green',
+        width: '100%',
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+      },
+      buttonOutline: {
+        backgroundColor: 'green',
+        marginTop: 5,
+        borderColor: 'goldenrod',
+        borderWidth: 2,
+      },
+      buttonText: {
+        color: 'white',
+        fontWeight: '700',
+        fontSize: 16,
+      },
+      buttonOutlineText: {
+        color: '#0782F9',
+        fontWeight: '700',
+        fontSize: 16,
+      },
+      extra: {
+        flexDirection: 'row',
+        paddingTop: 10,
+      },
   });

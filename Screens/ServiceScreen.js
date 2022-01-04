@@ -1,14 +1,39 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/core'
+import { createDrawerNavigator } from '@react-navigation/drawer';
+
+const Drawer = createDrawerNavigator();
+
 
 
 const ServiceScreen = () => {
+
+  function Profile({ navigation }) {
+
+    return (
+        <View >
+          
+        </View>
+      );
+    }
+
+function ViewRides({ navigation }) {
+
+      return (
+          <View >
+            
+          </View>
+        );
+      }
+  
+
   const navigation = useNavigation()
     return (
-        <View style={styles.container}>
-             <Text>Service Screen</Text>
-        </View>
+      <Drawer.Navigator>
+      <Drawer.Screen name="Find a ride!" component={ViewRides} />
+      <Drawer.Screen name="Profile" component={Profile} />
+    </Drawer.Navigator>
     )
 }
 
