@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { TouchableOpacity, KeyboardAvoidingView,StyleSheet, Text, TextInput, View } from 'react-native'
+import { TouchableOpacity,SafeAreaView, KeyboardAvoidingView,StyleSheet, Text, TextInput, View } from 'react-native'
 import { useNavigation } from '@react-navigation/core'
 import {  auth } from '../firebase'
 import { createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'
@@ -26,7 +26,9 @@ const RegistrationScreen = () => {
   }
 
   const logger=()=> {
-    navigation.navigate('Service')
+    navigation.navigate(('Service'),{
+      user: getRegemail
+    });
   }
 
   const checkname = () => {
@@ -37,7 +39,7 @@ const RegistrationScreen = () => {
     if(getname.length>10){
       alert("Username too long!")
     }
-    if(getname.length<2){
+    if(getname.length<2 && getname.length!=''){
       alert("Username too short!")
     }
   }
@@ -46,7 +48,7 @@ const RegistrationScreen = () => {
   }}
 
     return (
-        <KeyboardAvoidingView style={styles.container}
+        <SafeAreaView style={styles.container}
         behavior='padding'>
             <View>
                 
@@ -95,7 +97,7 @@ const RegistrationScreen = () => {
             </View>
             
             </View>
-        </KeyboardAvoidingView>
+        </SafeAreaView>
     )
 }
 
@@ -109,7 +111,7 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     input: {
-      backgroundColor: 'white',
+      backgroundColor: 'chartreuse',
       paddingHorizontal: 15,
       paddingVertical: 10,
       borderRadius: 10,
