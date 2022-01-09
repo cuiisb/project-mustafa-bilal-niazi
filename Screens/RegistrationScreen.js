@@ -1,24 +1,49 @@
 import React, {useState} from 'react'
 import { TouchableOpacity, KeyboardAvoidingView,StyleSheet, Text, TextInput, View } from 'react-native'
 import { useNavigation } from '@react-navigation/core'
-import { app } from '../firebase'
+import {  auth } from '../firebase'
+import { createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'
 
 const RegistrationScreen = () => {
   const navigation = useNavigation()
 
-  const [getemail, setemail] = useState('')
-  const [getpassword, setpassword] = useState('')
+  const [getRegemail, setRegemail] = useState('')
+  const [getRegpassword, setRegpassword] = useState('')
+  const [getname, setname] = useState('')
 
-  const handleSignUp = () => {
-    app
-      .createUserWithEmailAndPassword(getemail, getpassword)
-      .then(userCredentials => {
-        const user = userCredentials.user;
-        {() => navigation.navigate('Service')}
-        console.log('Registered with:', user.getemail);
-      })
-      .catch(error => alert(error.message))
+  const handleSignUp = async() => {
+    try{
+      const user = await createUserWithEmailAndPassword(auth, getRegemail, getRegpassword)
+      alert("Successful registration!")
+      
+      console.log(user)
+      logger()
+    }
+    catch(error){
+      alert(error.message)
+      console.log(`${error}`)
+    }
   }
+
+  const logger=()=> {
+    navigation.navigate('Service')
+  }
+
+  const checkname = () => {
+  if(getname=='' || getname.length>10){
+    if(getname==''){
+      alert("Username required!")
+    }
+    if(getname.length>10){
+      alert("Username too long!")
+    }
+    if(getname.length<2){
+      alert("Username too short!")
+    }
+  }
+  else{
+    handleSignUp()
+  }}
 
     return (
         <KeyboardAvoidingView style={styles.container}
@@ -26,24 +51,32 @@ const RegistrationScreen = () => {
             <View>
                 
                 <TextInput
-                placeholder='email'
+                placeholder='User name'
                 style={styles.style1}
-                value={getemail}
-                onChangeText={text=> setemail(text)}
+                value={getname}
+                onChangeText={text=> setname(text)}
+                style={styles.input}
+                />
+                <TextInput
+                placeholder='Email'
+                style={styles.style1}
+                value={getRegemail}
+                onChangeText={text=> setRegemail(text)}
                 style={styles.input}
                 />
                 <TextInput
                 placeholder='Password'
                 style={styles.style1}
-                value={getpassword}
-                onChangeText={text=> setpassword(text)}
+                value={getRegpassword}
+                onChangeText={text=> setRegpassword(text)}
                 style={styles.input}
                 secureTextEntry
                 />
 
             <View>
               <TouchableOpacity
-              onPress={() => navigation.navigate('Service')}
+              
+              onPress={checkname}
               style={[styles.button2,styles.buttonOutline,{marginTop:20}]}>
                 <Text style={styles.buttonText}>
                   Register!

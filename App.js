@@ -46,13 +46,10 @@ export default function App() {
       }}/>
         <Stack.Screen name="Service" component={ServiceScreen} options={{
       title: 'Sawaari services',
-      headerStyle: {
-        backgroundColor: 'seagreen',
-      },
-      headerTintColor: 'khaki',
-      headerTitleStyle: {
-        fontWeight: 'bold',
-      },
+      header: {
+        visible: false,
+      }
+      
       }}/>
       </Stack.Navigator>
     </NavigationContainer>

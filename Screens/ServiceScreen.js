@@ -1,19 +1,36 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
+import { Button, StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/core'
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { onAuthStateChanged,  signOut} from 'firebase/auth'
+import { auth } from '../firebase';
 
 const Drawer = createDrawerNavigator();
 
-
-
 const ServiceScreen = () => {
+
+  const [getUser, setUser]= useState({})
+
+  onAuthStateChanged( auth, (currentUser) => {
+    setUser(currentUser);
+  });
+
+  const handleLogout = async() => {
+    await signOut(auth)
+  }
+
+  const delogger=()=>{
+    handleLogout
+    {navigation.navigate('Login')}
+  }
+  
 
   function Profile({ navigation }) {
 
     return (
         <View >
-          
+          <Button title='Logout!' 
+          onPress={delogger} />
         </View>
       );
     }

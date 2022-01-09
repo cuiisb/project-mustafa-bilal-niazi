@@ -2,24 +2,34 @@ import React, { useState } from 'react'
 import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/core'
-import { app } from '../firebase'
+import { auth } from '../firebase'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 
 const LoginScreen = () => {
   const navigation = useNavigation()
 
-  const [getemail, setemail] = useState('')
-  const [getpassword, setpassword] = useState('')
+  const [getLoginemail, setLoginemail] = useState('')
+  const [getLoginpassword, setLoginpassword] = useState('')
 
-  const handleLogin = () => {
-    app
-      .signInWithEmailAndPassword(getemail, getpassword)
-      .then(userCredentials => {
-        const user = userCredentials.user;
-        {() => navigation.navigate('Service')}
-        console.log('Logged in with:', user.getemail);
-      })
-      .catch(error => alert(error.message))
+  const handleLogin = async() => {
+    try{ 
+      const user = await signInWithEmailAndPassword(auth, getLoginemail, getLoginpassword)
+      
+      logger()
+      alert("Welcome back sawaar!")
+      console.log(user)
+      
+    }
+    catch(error){
+      alert(error.message)
+      console.log(`${error}`)
+    }
   }
+
+  const logger=()=> {
+    {navigation.navigate('Service')}
+  }
+  
 
     return (
         <KeyboardAvoidingView style={styles.container}
@@ -27,22 +37,27 @@ const LoginScreen = () => {
             <View>
                 
                 <TextInput
-                placeholder='email'
-                value={getemail}
-                onChangeText={text=> setemail(text)}
+                placeholder='Email'
+                value={getLoginemail}
+                onChangeText={text=> setLoginemail(text)}
                 style={styles.input}
                 />
+                <View style={{flexDirection: 'row'}}>
                 <TextInput
-                placeholder='Password'
-                value={getpassword}
-                onChangeText={text=> setpassword(text)}
+                placeholder='Password' 
+                value={getLoginpassword}
+                onChangeText={text=> setLoginpassword(text)}
                 style={styles.input}
+                secureTextEntry
                 />
+                
+                </View>
+                
             </View>
             
             <View>
               <TouchableOpacity
-               onPress={() => navigation.navigate('Service')}
+               onPress={handleLogin}
               style={[styles.button2,styles.buttonOutline,{marginTop:20}]}>
                 <Text  style={styles.buttonText}>
                   Login!
@@ -79,6 +94,7 @@ const styles = StyleSheet.create({
       paddingVertical: 10,
       borderRadius: 10,
       marginTop: 5,
+      borderRadius: 1,
     },
     style1: {
         borderBottomWidth: 2,
