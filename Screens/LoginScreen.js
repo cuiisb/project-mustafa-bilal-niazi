@@ -3,6 +3,7 @@ import { TouchableOpacity,SafeAreaView,StyleSheet, Text, TextInput, View } from 
 import { useNavigation } from '@react-navigation/core'
 import { auth } from '../firebase'
 import { signInWithEmailAndPassword, onAuthStateChanged} from 'firebase/auth'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const LoginScreen = () => {
 
@@ -26,6 +27,15 @@ const LoginScreen = () => {
     }
   }
 
+  const showPass=()=>{
+    if(getLoginpassword==''){
+      alert("Empty field!")
+    }
+    else{
+      alert(`Password: ${getLoginpassword}`)
+    }
+  }
+
   const logger=()=> {
     {navigation.navigate(('Service'),{
       user: getLoginemail
@@ -46,7 +56,7 @@ const LoginScreen = () => {
                 onChangeText={text=> setLoginemail(text)}
                 style={styles.input}
                 />
-                
+                <View style={{flexDirection: 'row'}}>
                 <TextInput
                 placeholder='Password'
                 style={styles.style1} 
@@ -55,9 +65,11 @@ const LoginScreen = () => {
                 style={styles.input}
                 secureTextEntry
                 />
-        
-            
-            <View>
+                <TouchableOpacity style={{justifyContent: 'center',alignContent: 'center'}}>
+                  <MaterialCommunityIcons name="eye" color='black' size={26} onPress={showPass} />
+                </TouchableOpacity>
+                </View>
+              <View>
               <TouchableOpacity
                onPress={handleLogin}
               style={[styles.button2,styles.buttonOutline,{marginTop:20}]}>

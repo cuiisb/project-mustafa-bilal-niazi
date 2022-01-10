@@ -3,6 +3,7 @@ import { TouchableOpacity,SafeAreaView, KeyboardAvoidingView,StyleSheet, Text, T
 import { useNavigation } from '@react-navigation/core'
 import {  auth } from '../firebase'
 import { createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const RegistrationScreen = () => {
   const navigation = useNavigation()
@@ -24,7 +25,15 @@ const RegistrationScreen = () => {
       console.log(`${error}`)
     }
   }
-
+  const showPass=()=>{
+    if(getRegpassword==''){
+      alert("Empty field!")
+    }
+    else{
+      alert(`Password: ${getRegpassword}`)
+    }
+  }
+  
   const logger=()=> {
     navigation.navigate(('Service'),{
       user: getRegemail
@@ -66,6 +75,7 @@ const RegistrationScreen = () => {
                 onChangeText={text=> setRegemail(text)}
                 style={styles.input}
                 />
+                <View style={{flexDirection: 'row'}}>
                 <TextInput
                 placeholder='Password'
                 style={styles.style1}
@@ -74,6 +84,11 @@ const RegistrationScreen = () => {
                 style={styles.input}
                 secureTextEntry
                 />
+                  <TouchableOpacity style={{justifyContent: 'center',alignContent: 'center'}}>
+                    <MaterialCommunityIcons name="eye" color='black' size={26} onPress={showPass} />
+                  </TouchableOpacity>
+                </View>
+                
 
             <View>
               <TouchableOpacity
@@ -84,6 +99,7 @@ const RegistrationScreen = () => {
                   Register!
                 </Text>
               </TouchableOpacity>
+              
             </View>
             <View style={styles.extra}>
             <Text >already have an account? </Text>
