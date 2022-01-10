@@ -46,7 +46,7 @@ const LoginScreen = () => {
             <View>
                 
                 <TextInput
-                placeholder='Email'
+                placeholder='Email' placeholderTextColor='gray'
                 style={styles.style1}
                 value={getLoginemail}
                 onChangeText={text=> setLoginemail(text)}
@@ -54,7 +54,7 @@ const LoginScreen = () => {
                 />
                 <View style={{flexDirection: 'row'}}>
                 <TextInput
-                placeholder='Password'
+                placeholder='Password' placeholderTextColor='gray'
                 style={styles.style1} 
                 value={getLoginpassword}
                 onChangeText={text=> setLoginpassword(text)}

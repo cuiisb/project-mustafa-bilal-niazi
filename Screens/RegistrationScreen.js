@@ -60,14 +60,14 @@ const RegistrationScreen = () => {
             <View>
                 
                 <TextInput
-                placeholder='User name'
+                placeholder='User name' placeholderTextColor='gray'
                 style={styles.style1}
                 value={getname}
                 onChangeText={text=> setname(text)}
                 style={styles.input}
                 />
                 <TextInput
-                placeholder='Email'
+                placeholder='Email' placeholderTextColor='gray'
                 style={styles.style1}
                 value={getRegemail}
                 onChangeText={text=> setRegemail(text)}
@@ -75,7 +75,7 @@ const RegistrationScreen = () => {
                 />
                 <View style={{flexDirection: 'row'}}>
                 <TextInput
-                placeholder='Password'
+                placeholder='Password' placeholderTextColor='gray'
                 style={styles.style1}
                 value={getRegpassword}
                 onChangeText={text=> setRegpassword(text)}

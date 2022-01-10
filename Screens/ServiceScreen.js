@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { TextInput,Pressable, Modal ,Button, StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView ,TextInput,Pressable, Modal ,Button, StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/core'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { onAuthStateChanged,  signOut} from 'firebase/auth'
 import { auth } from '../firebase';
 import { MaterialCommunityIcons, SimpleLineIcons } from '@expo/vector-icons';
@@ -10,13 +9,11 @@ import { db } from '../firebase-cruds';
 import {collection, doc, updateDoc, addDoc, getDocs, deleteDoc} from 'firebase/firestore'
 import { useEffect } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
-import { NavigationContainer } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
-const Drawer = createDrawerNavigator();
 
 const ServiceScreen = ({route}) => {
-  const {user}=route.params;
+  const {user1}=route.params;
   const [users,setusers]=useState([])
   const usersrefdb=collection(db, 'users')
 
@@ -54,7 +51,7 @@ const ServiceScreen = ({route}) => {
     await deleteDoc(userDoc)
   };
 
-  const updateData = async(id) => {
+  const updateData = async(id, destination, location, Vehicletype, vehicleNo, City, tod) => {
     const userDoc =doc(db, 'users', id)
     const newFields= {
       destination: destination,
@@ -66,8 +63,9 @@ const ServiceScreen = ({route}) => {
     }
     await updateDoc(userDoc, newFields)
   };
-  const modalButton=()=>{
-    updateData()
+
+  const modalButton=(id, destination, location, Vehicletype, vehicleNo, City, tod)=>{
+    {()=>{updateData(id, destination, location, Vehicletype, vehicleNo, City, tod)}}
     setModalVisible(!modalVisible)
   }
   const [getUser, setUser]= useState({})
@@ -82,11 +80,11 @@ const ServiceScreen = ({route}) => {
     {navigation.navigate('Login')}
   }
 
-  function Profile({ navigation }) {
+  function Profile() {
   
     return (
         <View style={styles.container}>
-          <Text style={{color: 'black'}}>User Email: {JSON.stringify(user)}</Text>
+          <Text style={{color: 'black'}}>User Email: {JSON.stringify(user1)}</Text>
           <SimpleLineIcons name="picture" color='black' size={44} />
           <Button title='Logout!' 
           onPress={delogger} />
@@ -94,20 +92,23 @@ const ServiceScreen = ({route}) => {
       );
     }
 
-function ViewRides({ navigation }) {
+function ViewRides() {
 
       return (
+        <SafeAreaView style={styles.container}
+        behavior='padding'>
+          <ScrollView>
         <View> 
           {users.map((userinfo)=>{
             return (
-              <ScrollView style={styles.Scrollstyle}>
-                <View style={styles.Scrollpost}>
-                  <Text>Destination: {userinfo.destination}Location: {userinfo.location}  </Text>
-                  <Text>Time of departure: {userinfo.tod} </Text>
-                  <Text>vehicle: {userinfo.Vehicletype} No: {userinfo.vehicleNo} </Text>
-                  <Text>City: {userinfo.City} </Text>
+              
+                <View>
+                  <Text style={styles.style1}>Destination: {userinfo.destination}Location: {userinfo.location}  </Text>
+                  <Text style={styles.style1}>Time of departure: {userinfo.tod} </Text>
+                  <Text style={styles.style1}>vehicle: {userinfo.Vehicletype} No: {userinfo.vehicleNo} </Text>
+                  <Text style={styles.style1}>City: {userinfo.City} </Text>
                   <Modal
-                    animationType="slide"
+                    animationType="none"
                     transparent={true}
                     visible={modalVisible}
                     onRequestClose={() => {
@@ -168,7 +169,7 @@ function ViewRides({ navigation }) {
                       /></View>
                       <Pressable
                         style={[styles.button, styles.buttonOpen]}
-                        onPress={modalButton}
+                        onPress={()=>{modalButton(userinfo.id, destination, location, Vehicletype, vehicleNo, City, tod)}}
                       >
                         <Text style={styles.textStyle}>Update</Text>
                       </Pressable>
@@ -183,49 +184,49 @@ function ViewRides({ navigation }) {
                     <Text style={styles.textStyle}>Edit information</Text>
                   </Pressable>
                   <Button title='Delete Post'
-                    onPress={()=>deleteData}/>
+                    onPress={()=>{deleteData(userinfo.id)}}/>
                 </View>
               
-              </ScrollView>
-
+             
+              
             );
           })}
-        </View>
+        </View></ScrollView></SafeAreaView>
           
         );
         
       }
 
-function PostRides({ navigation }) {
+function PostRides() {
 
   return (
-    <View>
+    <View style={styles.container}>
                 <TextInput
-                placeholder='Location'
+                placeholder='Location' placeholderTextColor='gray'
                 style={styles.style1}
+                onChangeText={(text)=> {setlocation(text)}}
                 value={location}
-                onChangeText={text=> setlocation(text)}
                 style={styles.input}
                 
-                />
+                ></TextInput>
                 <TextInput
-                placeholder='Destination'
+                placeholder='Destination' placeholderTextColor='gray'
                 style={styles.style1}
                 value={destination}
-                onChangeText={text=> setdestination(text)}
+                onChangeText={text=> {setdestination(text)}}
                 style={styles.input}
                 
-                />
+                ></TextInput>
                 <TextInput
-                placeholder='City'
+                placeholder='City' placeholderTextColor='gray'
                 style={styles.style1}
                 value={City}
-                onChangeText={text=> setcity(text)}
+                onChangeText={text=> {setcity(text)}}
                 style={styles.input}
                 
                 />
                 <TextInput
-                placeholder='Time of departure'
+                placeholder='Time of departure' placeholderTextColor='gray'
                 style={styles.style1}
                 value={tod}
                 onChangeText={text=> settod(text)}
@@ -233,7 +234,7 @@ function PostRides({ navigation }) {
                 
                 />
                 <TextInput
-                placeholder='Vehidle Type'
+                placeholder='Vehicle Type' placeholderTextColor='gray'
                 style={styles.style1}
                 value={Vehicletype}
                 onChangeText={text=> setvehicletype(text)}
@@ -241,7 +242,7 @@ function PostRides({ navigation }) {
                 
                 />
                 <TextInput
-                placeholder='Vehidle id'
+                placeholder='Vehicle id' placeholderTextColor='gray'
                 style={styles.style1}
                 value={vehicleNo}
                 onChangeText={text=> setvehicleNo(text)}
@@ -258,13 +259,13 @@ function PostRides({ navigation }) {
     
   }
 
-  function Rider({ navigation }) {
-
+  const navigation = useNavigation()
     return (
+      
       <Tab.Navigator>
       <Tab.Screen name="Find a ride!" component={ViewRides} options={{
           tabBarColor: 'green',
-          tabBarLabel: 'Book Ride!',
+          tabBarLabel: 'Posted Ride!',
           tabBarIcon: () => (
             <MaterialCommunityIcons name="car" color='red' size={26} />
           ),
@@ -284,64 +285,6 @@ function PostRides({ navigation }) {
           ),
         }} />
     </Tab.Navigator>
-      );
-    }
-
-    function Driver({ navigation }) {
-
-      return (
-            <Tab.Navigator>
-            <Tab.Screen name="Find a ride!" component={ViewRides} options={{
-                tabBarColor: 'green',
-                tabBarLabel: 'Book Ride!',
-                tabBarIcon: () => (
-                  <MaterialCommunityIcons name="car" color='red' size={26} />
-                ),
-              }}  />
-            <Tab.Screen name="Profile" component={Profile} options={{
-                tabBarColor: 'yellow',
-                tabBarLabel: 'Profile',
-                tabBarIcon: () => (
-                  <MaterialCommunityIcons name="account" color='blue' size={26} />
-                ),
-              }} />
-              <Tab.Screen name="Post Rides!" component={PostRides} options={{
-                tabBarColor: 'red',
-                tabBarLabel: 'Post ride!',
-                tabBarIcon: () => (
-                  <MaterialCommunityIcons name="arrow-collapse-up" color='yellow' size={26} />
-                ),
-              }} />
-          </Tab.Navigator>
-         
-        );
-      }
-
-  const navigation = useNavigation()
-    return (
-      
-      <Drawer.Navigator>
-      <Drawer.Screen name="Driver" component={Driver} options={{
-        title: 'Driver',
-        headerStyle: {
-          backgroundColor: 'darkslategrey',
-        },
-        headerTintColor: 'silver',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-      }}/>
-        <Drawer.Screen name="Rider" component={Rider} options={{
-      title: 'Rider',
-      headerStyle: {
-        backgroundColor: 'darkslategrey',
-      },
-      headerTintColor: 'silver',
-      headerTitleStyle: {
-        fontWeight: 'bold',
-      },
-      }}/>
-      </Drawer.Navigator>
 
     )
 }
@@ -396,6 +339,11 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         paddingTop: 20,
       },
+      style11: {
+        borderBottomWidth: 2,
+        paddingTop: 20,
+        backgroundColor: 'goldenrod'        
+      },
       style2: {
         paddingTop: 30,
         alignContent: 'space-between'
@@ -428,7 +376,7 @@ const styles = StyleSheet.create({
       },
       Scrollpost: {
         borderRadius: 10,
-        width: '50%',
+        width: '90%',
       },
   });
 
