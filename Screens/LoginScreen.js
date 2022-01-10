@@ -15,11 +15,7 @@ const LoginScreen = () => {
   const handleLogin = async() => {
     try{ 
       const user = await signInWithEmailAndPassword(auth, getLoginemail, getLoginpassword)
-      
       logger()
-      alert("Welcome back sawaar!")
-      console.log(user)
-      
     }
     catch(error){
       alert(error.message)
@@ -65,7 +61,7 @@ const LoginScreen = () => {
                 style={styles.input}
                 secureTextEntry
                 />
-                <TouchableOpacity style={{justifyContent: 'center',alignContent: 'center'}}>
+                <TouchableOpacity style={styles.styleeye}>
                   <MaterialCommunityIcons name="eye" color='black' size={26} onPress={showPass} />
                 </TouchableOpacity>
                 </View>
@@ -107,6 +103,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'chartreuse',
     paddingHorizontal: 15,
     paddingVertical: 10,
+    borderRadius: 10,
+    marginTop: 5,
+  },
+  styleeye: {
+    backgroundColor:'chartreuse' ,
+    justifyContent: 'center',
+    alignContent: 'center',
     borderRadius: 10,
     marginTop: 5,
   },
