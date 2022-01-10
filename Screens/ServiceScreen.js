@@ -2,16 +2,16 @@ import React, { useState } from 'react'
 import { TextInput ,Button, StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/core'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { onAuthStateChanged,  signOut} from 'firebase/auth'
 import { auth } from '../firebase';
 import { MaterialCommunityIcons, SimpleLineIcons } from '@expo/vector-icons';
 import { db } from '../firebase-cruds';
-import {collection, doc, getDoc, getDocs} from 'firebase/firestore'
+import {collection, doc, addDoc, getDocs} from 'firebase/firestore'
 import { useEffect } from 'react';
 
 const Tab = createBottomTabNavigator();
-
-const FIREBASE_API_ENDPOINT = 'https://mad-sem-proj-default-rtdb.firebaseio.com/'; 
+const Drawer = createDrawerNavigator();
 
 const ServiceScreen = ({route}) => {
   const {user}=route.params;
@@ -36,29 +36,14 @@ const ServiceScreen = ({route}) => {
   const [destination, setdestination] = useState('')
 
   const postData = async() => {
-    var requestOptions = {
-      method: 'POST',
-      body: JSON.stringify({
-        destination: 'ee',
-        location: 'e',
-        Vehicletype: 'e',
-        vehicleNo: 'e',
-        City: 'e',
-        top: 'e',
-      }),
-    };
-
-    fetch(`${FIREBASE_API_ENDPOINT}/users.json`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => console.log(result))
-      .catch((error) => console.log('error', error));
-  };
-
-  
-  const getData = async () => {
-    const response = await fetch(`${FIREBASE_API_ENDPOINT}/tasks.json`);
-    const data = await response.json();
-    console.log(data);
+    await addDoc(usersrefdb , {
+        destination: destination,
+        location: location,
+        Vehicletype: Vehicletype,
+        vehicleNo: vehicleNo,
+        City: City,
+        tod: tod,
+    })
   };
 
   const deleteData = () => {
@@ -124,8 +109,10 @@ function ViewRides({ navigation }) {
           {users.map((userinfo)=>{
             return (
               <View>
-              <Text>Name: {userinfo.name} </Text>
-              <Text>City: {userinfo.city} </Text>
+              <Text>Destination: {userinfo.destination}Location: {userinfo.location}  </Text>
+              <Text>Time of departure: {userinfo.tod} </Text>
+              <Text>vehicle: {userinfo.Vehicletype} No: {userinfo.vehicleNo} </Text>
+              <Text>City: {userinfo.City} </Text>
               </View>
 
             );
@@ -145,7 +132,7 @@ function PostRides({ navigation }) {
                 value={location}
                 onChangeText={text=> setlocation(text)}
                 style={styles.input}
-                secureTextEntry
+                
                 />
                 <TextInput
                 placeholder='Destination'
@@ -153,7 +140,7 @@ function PostRides({ navigation }) {
                 value={destination}
                 onChangeText={text=> setdestination(text)}
                 style={styles.input}
-                secureTextEntry
+                
                 />
                 <TextInput
                 placeholder='City'
@@ -161,7 +148,7 @@ function PostRides({ navigation }) {
                 value={City}
                 onChangeText={text=> setcity(text)}
                 style={styles.input}
-                secureTextEntry
+                
                 />
                 <TextInput
                 placeholder='Time of departure'
@@ -169,7 +156,7 @@ function PostRides({ navigation }) {
                 value={tod}
                 onChangeText={text=> settod(text)}
                 style={styles.input}
-                secureTextEntry
+                
                 />
                 <TextInput
                 placeholder='Vehidle Type'
@@ -177,7 +164,7 @@ function PostRides({ navigation }) {
                 value={Vehicletype}
                 onChangeText={text=> setvehicletype(text)}
                 style={styles.input}
-                secureTextEntry
+                
                 />
                 <TextInput
                 placeholder='Vehidle id'
@@ -185,11 +172,11 @@ function PostRides({ navigation }) {
                 value={vehicleNo}
                 onChangeText={text=> setvehicleNo(text)}
                 style={styles.input}
-                secureTextEntry
+                
                 />
 
                 <Button title='Post ride' 
-                onPress={()=>postData}/>
+                onPress={postData}/>
 
     </View>
       

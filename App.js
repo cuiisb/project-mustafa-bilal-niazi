@@ -45,8 +45,7 @@ export default function App() {
       },
       }}/>
         <Stack.Screen name="Service" component={ServiceScreen} options={{
-      title: 'Sawaari services',
-      visible: false,
+        headerShown: false
       
       }}/>
       </Stack.Navigator>
