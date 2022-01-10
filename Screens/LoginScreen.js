@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TouchableOpacity,SafeAreaView, KeyboardAvoidingView,StyleSheet, Text, TextInput, View } from 'react-native'
+import { TouchableOpacity,SafeAreaView,StyleSheet, Text, TextInput, View } from 'react-native'
 import { useNavigation } from '@react-navigation/core'
 import { auth } from '../firebase'
 import { signInWithEmailAndPassword, onAuthStateChanged} from 'firebase/auth'

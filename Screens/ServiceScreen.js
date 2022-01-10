@@ -1,15 +1,33 @@
 import React, { useState } from 'react'
-import { Button, StyleSheet, Text, View } from 'react-native'
+import { TextInput ,Button, StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/core'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { onAuthStateChanged,  signOut} from 'firebase/auth'
 import { auth } from '../firebase';
 import { MaterialCommunityIcons, SimpleLineIcons } from '@expo/vector-icons';
+import { db } from '../firebase-cruds';
+import {collection, doc, getDoc, getDocs} from 'firebase/firestore'
+import { useEffect } from 'react';
 
 const Tab = createBottomTabNavigator();
+
 const FIREBASE_API_ENDPOINT = 'https://mad-sem-proj-default-rtdb.firebaseio.com/'; 
+
 const ServiceScreen = ({route}) => {
   const {user}=route.params;
+  const [users,setusers]=useState([])
+  const usersrefdb=collection(db, 'users')
+
+  useEffect(() => {
+    const getusers = async () =>{
+      const data= await getDocs(usersrefdb)
+      console.log(data)
+      setusers(data.docs.map((doc)=>({...doc.data(), id: doc.id })));
+
+    }
+    getusers()
+  }, [])
+
   const [Vehicletype,setvehicletype]=useState('')
   const [vehicleNo,setvehicleNo]=useState('')
   const [City,setcity]=useState('')
@@ -17,16 +35,16 @@ const ServiceScreen = ({route}) => {
   const [location, setlocation] = useState('')
   const [destination, setdestination] = useState('')
 
-  const postData = () => {
+  const postData = async() => {
     var requestOptions = {
       method: 'POST',
       body: JSON.stringify({
-        destination: '',
-        location: '',
-        Vehicletype: '',
-        vehicleNo: '',
-        City: '',
-        top: '',
+        destination: 'ee',
+        location: 'e',
+        Vehicletype: 'e',
+        vehicleNo: 'e',
+        City: 'e',
+        top: 'e',
       }),
     };
 
@@ -102,8 +120,17 @@ const ServiceScreen = ({route}) => {
 function ViewRides({ navigation }) {
 
       return (
-      <Text>{getData}</Text>
-      
+        <View> 
+          {users.map((userinfo)=>{
+            return (
+              <View>
+              <Text>Name: {userinfo.name} </Text>
+              <Text>City: {userinfo.city} </Text>
+              </View>
+
+            );
+          })}
+        </View>
           
         );
         
@@ -141,6 +168,22 @@ function PostRides({ navigation }) {
                 style={styles.style1}
                 value={tod}
                 onChangeText={text=> settod(text)}
+                style={styles.input}
+                secureTextEntry
+                />
+                <TextInput
+                placeholder='Vehidle Type'
+                style={styles.style1}
+                value={Vehicletype}
+                onChangeText={text=> setvehicletype(text)}
+                style={styles.input}
+                secureTextEntry
+                />
+                <TextInput
+                placeholder='Vehidle id'
+                style={styles.style1}
+                value={vehicleNo}
+                onChangeText={text=> setvehicleNo(text)}
                 style={styles.input}
                 secureTextEntry
                 />
