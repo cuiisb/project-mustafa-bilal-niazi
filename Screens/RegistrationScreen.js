@@ -73,7 +73,7 @@ const RegistrationScreen = () => {
                 onChangeText={text=> setRegemail(text)}
                 style={styles.input}
                 />
-                <View style={{flexDirection: 'row'}}>
+                <View >
                 <TextInput
                 placeholder='Password' placeholderTextColor='gray'
                 style={styles.style1}
@@ -82,11 +82,11 @@ const RegistrationScreen = () => {
                 style={styles.input}
                 secureTextEntry
                 />
-                  <TouchableOpacity style={styles.styleeye}>
+                  
+                </View>
+                <TouchableOpacity style={styles.styleeye}>
                     <MaterialCommunityIcons name="eye" color='black' size={26} onPress={showPass} />
                   </TouchableOpacity>
-                </View>
-                
 
             <View>
               <TouchableOpacity
@@ -137,6 +137,8 @@ const styles = StyleSheet.create({
       alignContent: 'center',
       borderRadius: 10,
       marginTop: 5,
+      width: 27,
+      alignSelf: 'center'
     },
     style1: {
         borderBottomWidth: 2,

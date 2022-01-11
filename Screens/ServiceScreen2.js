@@ -42,16 +42,18 @@ const ServiceScreen2 = ({route}) => {
   const handleLogout = async() => {
     await signOut(auth)
   }
-  const rideBooked=(a,b,c,d,e,f)=>{
-    setdestination(a)
-    setlocation(b)
-    settod(c)
-    setvehicletype(d)
-    setvehicleNo(e)
-    setcity(f)
+  const rideBooked=(a,b,c,d,e,f,g)=>{
+    setmydriverID(a)
+    setdestination(b)
+    setlocation(c)
+    settod(d)
+    setvehicletype(e)
+    setvehicleNo(f)
+    setcity(g)
+    alert("You booked a ride!")
   }
 
-  const checkbooking=(a,b,c,d,e,f)=>{
+  const checkbooking=(a,b,c,d,e,f,g)=>{
     if(destination!='' || location!='' || Vehicletype!='' || 
     vehicleNo!='' ||  City!='' || tod!='' ){
         return (
@@ -60,11 +62,12 @@ const ServiceScreen2 = ({route}) => {
         )
     }
     else{
-        rideBooked(a,b,c,d,e,f)
+        rideBooked(a,b,c,d,e,f,g)
     }
   }
 
   const cancelbooking=()=>{
+        setmydriverID('')
         setdestination('')
         setlocation('')
         settod('')
@@ -96,7 +99,7 @@ const ServiceScreen2 = ({route}) => {
 function ViewRides() {
 
       return (
-        <SafeAreaView style={styles.container}
+        <SafeAreaView style={styles.containernew}
         behavior='padding'>
           <ScrollView>
         <View> 
@@ -109,11 +112,15 @@ function ViewRides() {
                   <Text style={styles.style1}>Time of departure: {userinfo.tod} </Text>
                   <Text style={styles.style1}>vehicle: {userinfo.Vehicletype} No: {userinfo.vehicleNo} </Text>
                   <Text style={styles.style1}>City: {userinfo.City} </Text>
-                  
-                  <Button title='Book Ride'
+                  <Pressable
+                    style={[styles.button, styles.buttonOpen2]}
                     onPress={()=>{checkbooking(userinfo.driverID,userinfo.destination, 
-                    userinfo.location, userinfo.tod ,userinfo.Vehicletype
-                    ,userinfo.vehicleNo, userinfo.City)}}/>
+                        userinfo.location, userinfo.tod ,userinfo.Vehicletype
+                        ,userinfo.vehicleNo, userinfo.City)}}
+                  >
+                    <Text style={styles.textStyle}>Book Ride</Text>
+                  </Pressable>
+                  
                 </View>
               
             );
@@ -129,23 +136,37 @@ function BookedRide() {
     if(destination=='' || location=='' || Vehicletype=='' || 
     vehicleNo=='' ||  City=='' || tod=='' ){
         return (
-            <View><Text>No rides booked yet.</Text></View>
-
+            <View style={styles.container3}>
+      <Text style={styles.italic} >No rides booked yet.</    Text>
+    </View>
+           
         )
     }else{
         return (
+            <View style={styles.container}> 
             <View>
-                <Text>RIDE BOOKED! </Text>
-                <Text>--Ride Details--</Text>
+      <Text style={styles.italic} >RIDE BOOKED! </    Text>
+    </View><View>
+      <Text style={styles.italic} >--Ride Details--</    Text>
+    </View>
+            
+                
+            <View style={styles.container2}>
+
+            <Text style={styles.style1}>Driver ID: {mydriverID}</Text>
                 <Text style={styles.style1}>Destination: {destination} Location: {location}  </Text>
                 <Text style={styles.style1}>Time of departure: {tod} </Text>
                 <Text style={styles.style1}>vehicle: {Vehicletype} No: {vehicleNo} </Text>
                 <Text style={styles.style1}>City: {City} </Text>
+                <View style={{alignSelf:'center',width: '50%'}}>
                 <Button 
+                
                 title="Cancel Booking"
                 onPress={cancelbooking}
                 />
-            </View>
+                </View>
+                
+            </View></View>
         );
     }
 
@@ -157,19 +178,29 @@ function BookedRide() {
     return (
       
       <Tab.Navigator>
-      <Tab.Screen name="Posted Rides!" component={ViewRides} options={{
+      <Tab.Screen name="Available Rides!" component={ViewRides} options={{
           tabBarColor: 'green',
           tabBarLabel: 'Posted Rides!',
           tabBarIcon: () => (
             <MaterialCommunityIcons name="car" color='red' size={26} />
           ),
-        }}  />
+          headerStyle: {
+            backgroundColor: 'black',
+          },
+          headerTitleAlign: 'center',
+          headerTintColor: 'palegoldenrod',
+        }} />
       <Tab.Screen name="Profile" component={Profile} options={{
           tabBarColor: 'yellow',
           tabBarLabel: 'Profile',
           tabBarIcon: () => (
             <MaterialCommunityIcons name="account" color='blue' size={26} />
           ),
+          headerStyle: {
+            backgroundColor: 'black',
+          },
+          headerTitleAlign: 'center',
+          headerTintColor: 'palegoldenrod',
         }} />
         <Tab.Screen name="Ride Booked" component={BookedRide} options={{
           tabBarColor: 'red',
@@ -177,6 +208,11 @@ function BookedRide() {
           tabBarIcon: () => (
             <MaterialCommunityIcons name="swap-vertical-bold" color='yellow' size={26} />
           ),
+          headerStyle: {
+            backgroundColor: 'black',
+          },
+          headerTitleAlign: 'center',
+          headerTintColor: 'palegoldenrod',
         }} />
     </Tab.Navigator>
 
@@ -188,15 +224,44 @@ export default ServiceScreen2
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: 'tan',
       alignItems: 'center',
       justifyContent: 'center',
     },
+    containernew: {
+        flex: 1,
+        backgroundColor: 'khaki',
+        justifyContent: 'center',
+      },
     container2: {
-      backgroundColor: 'khaki',
-      borderRadius: 10,
-      marginBottom: 10,
+        borderBottomWidth: 2,
+        paddingTop: 20,
+        backgroundColor: 'palegoldenrod',
+        width: '80%',
+        alignSelf: 'center',
+        marginTop: 25,
+        borderRadius: 20
     },
+    container3: {
+        flex: 1,
+        paddingTop: 0,
+        backgroundColor: 'khaki',
+        justifyContent: 'center',
+        alignItems: "center"
+      },
+      italic: {
+        fontStyle: 'italic',
+        fontSize: 20,
+        paddingBottom: 30,
+        fontWeight: 'bold'
+      },
+      buttonOpen2: {
+        backgroundColor: "darkolivegreen",
+        width: "70%",
+        borderRadius: 20,
+        alignSelf: 'center',
+        paddingBottom: 10
+      },
     centeredView: {
       flex: 1,
       justifyContent: "center",

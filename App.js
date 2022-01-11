@@ -19,15 +19,20 @@ export default function App() {
       headerStyle: {
         backgroundColor: 'seagreen',
       },
+      
       headerTintColor: 'khaki',
       headerTitleStyle: {
         fontWeight: 'bold',
       },
-      }} />
+      } 
+      } />
         <Stack.Screen name="Registration" component={RegistrationScreen} options={{
       title: 'Register as a sawaar!',
       headerStyle: {
         backgroundColor: 'seagreen',
+      },
+      navigationOptions:  {
+        headerLeft: null
       },
       headerTintColor: 'khaki',
       headerTitleStyle: {
@@ -39,17 +44,25 @@ export default function App() {
       headerStyle: {
         backgroundColor: 'seagreen',
       },
+      navigationOptions:  {
+        headerLeft: null
+      },
       headerTintColor: 'khaki',
       headerTitleStyle: {
         fontWeight: 'bold',
       },
       }}/>
         <Stack.Screen name="Service" component={ServiceScreen} options={{
-        headerShown: false
-      
+        headerShown: false,
+        navigationOptions:  {
+          headerLeft: null
+        },
       }}/>
       <Stack.Screen name="Service2" component={ServiceScreen2} options={{
-        headerShown: false
+        headerShown: false,
+        navigationOptions:  {
+          headerLeft: null
+        },
       
       }}/>
       </Stack.Navigator>
