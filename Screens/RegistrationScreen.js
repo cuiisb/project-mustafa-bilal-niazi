@@ -25,7 +25,7 @@ const RegistrationScreen = () => {
   }
   const showPass=()=>{
     if(getRegpassword==''){
-      alert("Empty field!")
+      alert("Empty password field!")
     }
     else{
       alert(`Password: ${getRegpassword}`)
@@ -34,7 +34,7 @@ const RegistrationScreen = () => {
   
   const logger=()=> {
     navigation.navigate(('Service'),{
-      user: getRegemail
+      useremail: getRegemail
     });
   }
 
@@ -100,7 +100,7 @@ const RegistrationScreen = () => {
               
             </View>
             <View style={styles.extra}>
-            <Text >already have an account? </Text>
+            <Text >Already have an account? </Text>
             <TouchableOpacity
                 onPress={() => navigation.navigate('Login')}
             >

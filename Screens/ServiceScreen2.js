@@ -12,8 +12,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 const Tab = createBottomTabNavigator();
 
-const ServiceScreen = ({route}) => {
-  const {user1}=route.params;
+const ServiceScreen2 = ({route}) => {
+  const user1=route.params;
   const [users,setusers]=useState([])
   const usersrefdb=collection(db, 'users')
 
@@ -54,15 +54,18 @@ const ServiceScreen = ({route}) => {
     handleLogout
     {navigation.navigate('Login')}
   }
-
   function Profile() {
   
     return (
         <View style={styles.container}>
-          <Text style={{color: 'black'}}>User Email: {JSON.stringify(user1)}</Text>
+          <Text style={{color: 'black'}}>User Email: </Text>
           <SimpleLineIcons name="picture" color='black' size={44} />
           <Button title='Logout!' 
           onPress={delogger} />
+          <Button title='Switch to driver!' 
+          onPress={() => navigation.navigate(('Service'),{
+            useremail: user1
+          })} />
         </View>
       );
     }
@@ -77,8 +80,8 @@ function ViewRides() {
           {users.map((userinfo)=>{
             return (
               
-                <View>
-                  <Text style={styles.style1}>Destination: {userinfo.destination}Location: {userinfo.location}  </Text>
+                <View style={styles.container2}>
+                  <Text style={styles.style1}>Destination: {userinfo.destination} Location: {userinfo.location}  </Text>
                   <Text style={styles.style1}>Time of departure: {userinfo.tod} </Text>
                   <Text style={styles.style1}>vehicle: {userinfo.Vehicletype} No: {userinfo.vehicleNo} </Text>
                   <Text style={styles.style1}>City: {userinfo.City} </Text>
@@ -89,8 +92,6 @@ function ViewRides() {
                     ,userinfo.vehicleNo, userinfo.City)}}/>
                 </View>
               
-             
-              
             );
           })}
         </View></ScrollView></SafeAreaView>
@@ -100,25 +101,30 @@ function ViewRides() {
       }
 
 function BookedRide() {
+    if(destination=='' || location=='' || Vehicletype=='' || 
+    vehicleNo=='' ||  City=='' || tod=='' ){
+        return (
+            <View><Text>No rides booked yet.</Text></View>
 
-    return (
-        <View>
-            <Text>
-                RIDE BOOKED! 
-                -Ride details-
-            Destination: {destination}
-            Location: {location}
-            time of departure: {tod}
-            vehicletype: {Vehicletype}
-            vehicleNo: {vehicleNo}
-            City: {City}
-                    </Text>
-        </View>
-    );
+        )
+    }else{
+        return (
+            <View>
+                <Text>RIDE BOOKED! </Text>
+                <Text>--Ride Details--</Text>
+                <Text style={styles.style1}>Destination: {destination} Location: {location}  </Text>
+                <Text style={styles.style1}>Time of departure: {tod} </Text>
+                <Text style={styles.style1}>vehicle: {Vehicletype} No: {vehicleNo} </Text>
+                <Text style={styles.style1}>City: {City} </Text>
+            </View>
+        );
+    }
+
     
   }
 
   const navigation = useNavigation()
+
     return (
       
       <Tab.Navigator>
@@ -148,7 +154,7 @@ function BookedRide() {
     )
 }
 
-export default ServiceScreen
+export default ServiceScreen2
 
 const styles = StyleSheet.create({
     container: {
@@ -156,7 +162,11 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
-         
+    },
+    container2: {
+      backgroundColor: 'khaki',
+      borderRadius: 10,
+      marginBottom: 10,
     },
     centeredView: {
       flex: 1,
@@ -194,6 +204,13 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         textAlign: "center",
       },
+      input: {
+        backgroundColor: 'chartreuse',
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        borderRadius: 10,
+        marginTop: 5,
+      },
       style1: {
         borderBottomWidth: 2,
         paddingTop: 20,
@@ -230,8 +247,25 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         backgroundColor: 'khaki',
         alignContent:'center',
-        
-
+      
+      },
+      button2: {
+        backgroundColor: 'green',
+        width: '100%',
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+      },
+      buttonOutline: {
+        backgroundColor: 'green',
+        marginTop: 5,
+        borderColor: 'goldenrod',
+        borderWidth: 2,
+      },
+      buttonText: {
+        color: 'white',
+        fontWeight: '700',
+        fontSize: 16,
       },
       Scrollpost: {
         borderRadius: 10,

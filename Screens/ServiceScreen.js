@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { SafeAreaView ,TextInput,Pressable, Modal ,Button, StyleSheet, Text, View } from 'react-native'
+import { RefreshControl, TouchableOpacity,SafeAreaView ,TextInput,Pressable, Modal ,Button, StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/core'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { onAuthStateChanged,  signOut} from 'firebase/auth'
@@ -12,11 +12,19 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 const Tab = createBottomTabNavigator();
 
-const ServiceScreen = ({route}) => {
-  const {user1}=route.params;
+
+function ServiceScreen  ({route}) {
+
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+  
+
+  const {useremail}=route.params;
+  const driverpassedID=JSON.stringify(useremail);
   const [users,setusers]=useState([])
   const usersrefdb=collection(db, 'users')
-
+  
   useEffect(() => {
     const getusers = async () =>{
       const data= await getDocs(usersrefdb)
@@ -36,7 +44,9 @@ const ServiceScreen = ({route}) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const postData = async() => {
+    
     await addDoc(usersrefdb , {
+        driverID: driverpassedID,
         destination: destination,
         location: location,
         Vehicletype: Vehicletype,
@@ -51,21 +61,21 @@ const ServiceScreen = ({route}) => {
     await deleteDoc(userDoc)
   };
 
-  const updateData = async(id, destination, location, Vehicletype, vehicleNo, City, tod) => {
+  const updateData = async(id, destination1, location1, Vehicletype1, vehicleNo1, City1, tod1) => {
     const userDoc =doc(db, 'users', id)
     const newFields= {
-      destination: destination,
-      location: location,
-      Vehicletype: Vehicletype,
-      vehicleNo: vehicleNo,
-      City: City,
-      tod: tod,
+      destination: {destination1},
+      location: {location1},
+      Vehicletype: {Vehicletype1},
+      vehicleNo: {vehicleNo1},
+      City: {City1},
+      tod: {tod1},
     }
     await updateDoc(userDoc, newFields)
   };
 
   const modalButton=(id, destination, location, Vehicletype, vehicleNo, City, tod)=>{
-    {()=>{updateData(id, destination, location, Vehicletype, vehicleNo, City, tod)}}
+    {updateData(id, destination, location, Vehicletype, vehicleNo, City, tod)}
     setModalVisible(!modalVisible)
   }
   const [getUser, setUser]= useState({})
@@ -79,30 +89,54 @@ const ServiceScreen = ({route}) => {
     handleLogout
     {navigation.navigate('Login')}
   }
+  const poster=()=>{
+    if(destination=='' || location=='' || Vehicletype=='' || 
+    vehicleNo=='' ||  City=='' || tod=='' ){
+      alert("You left some field(s) empty!")
+    }
+    else{
+      postData()
+      alert("Posted ride!")
+    }
+  }
 
-  function Profile() {
+  function Profile({navigation}) {
   
     return (
         <View style={styles.container}>
-          <Text style={{color: 'black'}}>User Email: {JSON.stringify(user1)}</Text>
           <SimpleLineIcons name="picture" color='black' size={44} />
+          <Text style={{color: 'black'}}>User Email: {driverpassedID}</Text>
+          
           <Button title='Logout!' 
           onPress={delogger} />
+          <Button title='Switch to rider!' 
+          onPress={() => navigation.navigate(('Service2'),{
+            useremail: user1
+          })} />
         </View>
       );
     }
 
-function ViewRides() {
+function ViewRides({navigation}) {
+  const [refreshing, setRefreshing] = React.useState(false);
 
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
       return (
         <SafeAreaView style={styles.container}
         behavior='padding'>
-          <ScrollView>
-        <View> 
+          <ScrollView
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+                      
+
+        <View > 
           {users.map((userinfo)=>{
             return (
               
-                <View>
+                <View style={styles.container2}>
+                  <Text style={styles.style1}>Driver ID: {userinfo.driverID}</Text>
                   <Text style={styles.style1}>Destination: {userinfo.destination}Location: {userinfo.location}  </Text>
                   <Text style={styles.style1}>Time of departure: {userinfo.tod} </Text>
                   <Text style={styles.style1}>vehicle: {userinfo.Vehicletype} No: {userinfo.vehicleNo} </Text>
@@ -112,7 +146,7 @@ function ViewRides() {
                     transparent={true}
                     visible={modalVisible}
                     onRequestClose={() => {
-                      Alert.alert("Modal has been closed.");
+                      alert("Modal has been closed.");
                       setModalVisible(!modalVisible);
                     }}
                   >
@@ -197,14 +231,16 @@ function ViewRides() {
         
       }
 
-function PostRides() {
-
+function PostRides({navigation}) {
+  
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}
+        behavior='padding'>
+            <View>
                 <TextInput
                 placeholder='Location' placeholderTextColor='gray'
                 style={styles.style1}
-                onChangeText={(text)=> {setlocation(text)}}
+                onChangeText={text=> {setlocation(text)}}
                 value={location}
                 style={styles.input}
                 
@@ -229,7 +265,7 @@ function PostRides() {
                 placeholder='Time of departure' placeholderTextColor='gray'
                 style={styles.style1}
                 value={tod}
-                onChangeText={text=> settod(text)}
+                onChangeText={text=> {settod(text)}}
                 style={styles.input}
                 
                 />
@@ -237,7 +273,7 @@ function PostRides() {
                 placeholder='Vehicle Type' placeholderTextColor='gray'
                 style={styles.style1}
                 value={Vehicletype}
-                onChangeText={text=> setvehicletype(text)}
+                onChangeText={text=> {setvehicletype(text)}}
                 style={styles.input}
                 
                 />
@@ -245,15 +281,22 @@ function PostRides() {
                 placeholder='Vehicle id' placeholderTextColor='gray'
                 style={styles.style1}
                 value={vehicleNo}
-                onChangeText={text=> setvehicleNo(text)}
+                onChangeText={text=> {setvehicleNo(text)}}
                 style={styles.input}
                 
                 />
+              <View>
+              <TouchableOpacity
+               onPress={poster}
+              style={[styles.button2,styles.buttonOutline,{marginTop:20}]}>
+                <Text  style={styles.buttonText}>
+                  Post!
+                </Text>
+              </TouchableOpacity>
+              </View>
 
-                <Button title='Post ride' 
-                onPress={postData}/>
-
-    </View>
+              </View>
+        </SafeAreaView>
       
     );
     
@@ -263,7 +306,8 @@ function PostRides() {
     return (
       
       <Tab.Navigator>
-      <Tab.Screen name="Find a ride!" component={ViewRides} options={{
+        
+      <Tab.Screen name="View Posted Rides" component={ViewRides} options={{
           tabBarColor: 'green',
           tabBarLabel: 'Posted Ride!',
           tabBarIcon: () => (
@@ -277,7 +321,7 @@ function PostRides() {
             <MaterialCommunityIcons name="account" color='blue' size={26} />
           ),
         }} />
-        <Tab.Screen name="Post Rides!" component={PostRides} options={{
+        <Tab.Screen name="Post Rides" component={PostRides} options={{
           tabBarColor: 'red',
           tabBarLabel: 'Post ride!',
           tabBarIcon: () => (
@@ -297,7 +341,11 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
-         
+    },
+    container2: {
+      backgroundColor: 'khaki',
+      borderRadius: 10,
+      marginBottom: 10,
     },
     centeredView: {
       flex: 1,
@@ -335,6 +383,13 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         textAlign: "center",
       },
+      input: {
+        backgroundColor: 'chartreuse',
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        borderRadius: 10,
+        marginTop: 5,
+      },
       style1: {
         borderBottomWidth: 2,
         paddingTop: 20,
@@ -371,8 +426,25 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         backgroundColor: 'khaki',
         alignContent:'center',
-        
-
+      
+      },
+      button2: {
+        backgroundColor: 'green',
+        width: '100%',
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+      },
+      buttonOutline: {
+        backgroundColor: 'green',
+        marginTop: 5,
+        borderColor: 'goldenrod',
+        borderWidth: 2,
+      },
+      buttonText: {
+        color: 'white',
+        fontWeight: '700',
+        fontSize: 16,
       },
       Scrollpost: {
         borderRadius: 10,

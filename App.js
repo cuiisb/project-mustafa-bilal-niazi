@@ -6,8 +6,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './Screens/HomeScreen';
 import LoginScreen from './Screens/LoginScreen';
 import RegistrationScreen from './Screens/RegistrationScreen';
-import ServiceScreen  from './Screens/ServiceScreen';
-
+import ServiceScreen from './Screens/ServiceScreen';
+import ServiceScreen2 from './Screens/ServiceScreen2';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -45,6 +45,10 @@ export default function App() {
       },
       }}/>
         <Stack.Screen name="Service" component={ServiceScreen} options={{
+        headerShown: false
+      
+      }}/>
+      <Stack.Screen name="Service2" component={ServiceScreen2} options={{
         headerShown: false
       
       }}/>

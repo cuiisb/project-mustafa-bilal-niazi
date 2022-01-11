@@ -34,7 +34,7 @@ const LoginScreen = () => {
 
   const logger=()=> {
     {navigation.navigate(('Service'),{
-      user: getLoginemail
+      useremail: getLoginemail
     }
     );
   }}
@@ -75,7 +75,7 @@ const LoginScreen = () => {
               </TouchableOpacity>
               </View>
               <View style={styles.extra}>
-            <Text >don't have an account? </Text>
+            <Text >Don't have an account? </Text>
             <TouchableOpacity
               onPress={() => navigation.navigate('Registration')}
               >
