@@ -61,15 +61,16 @@ function ServiceScreen  ({route}) {
     await deleteDoc(userDoc)
   };
 
-  const updateData = async(id, destination1, location1, Vehicletype1, vehicleNo1, City1, tod1) => {
+  const updateData = async(id) => {
     const userDoc =doc(db, 'users', id)
     const newFields= {
-      destination: {destination1},
-      location: {location1},
-      Vehicletype: {Vehicletype1},
-      vehicleNo: {vehicleNo1},
-      City: {City1},
-      tod: {tod1},
+      driverID: driverpassedID,
+      destination: destination,
+      location: location,
+      Vehicletype: Vehicletype,
+      vehicleNo: vehicleNo,
+      City: City,
+      tod: tod,
     }
     await updateDoc(userDoc, newFields)
   };
@@ -111,7 +112,7 @@ function ServiceScreen  ({route}) {
           onPress={delogger} />
           <Button title='Switch to rider!' 
           onPress={() => navigation.navigate(('Service2'),{
-            useremail: user1
+            useremail: useremail
           })} />
         </View>
       );
@@ -133,6 +134,9 @@ function ViewRides({navigation}) {
 
         <View > 
           {users.map((userinfo)=>{
+            if(userinfo.driverID==driverpassedID){
+
+            
             return (
               
                 <View style={styles.container2}>
@@ -146,7 +150,7 @@ function ViewRides({navigation}) {
                     transparent={true}
                     visible={modalVisible}
                     onRequestClose={() => {
-                      alert("Modal has been closed.");
+                      alert("Not updated");
                       setModalVisible(!modalVisible);
                     }}
                   >
@@ -157,7 +161,7 @@ function ViewRides({navigation}) {
                       placeholder='Location'
                       style={styles.style1}
                       value={location}
-                      onChangeText={location=> setlocation(location)}
+                      onChangeText={text=> setlocation(text)}
                       style={styles.input}
                       
                       />
@@ -203,7 +207,7 @@ function ViewRides({navigation}) {
                       /></View>
                       <Pressable
                         style={[styles.button, styles.buttonOpen]}
-                        onPress={()=>{modalButton(userinfo.id, destination, location, Vehicletype, vehicleNo, City, tod)}}
+                        onPress={()=>{modalButton(userinfo.id)}}
                       >
                         <Text style={styles.textStyle}>Update</Text>
                       </Pressable>
@@ -223,7 +227,7 @@ function ViewRides({navigation}) {
               
              
               
-            );
+            );}
           })}
         </View></ScrollView></SafeAreaView>
           

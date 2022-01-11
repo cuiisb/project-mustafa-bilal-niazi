@@ -13,7 +13,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 const Tab = createBottomTabNavigator();
 
 const ServiceScreen2 = ({route}) => {
-  const user1=route.params;
+  const {useremail}=route.params;
+  const driverpassedID2=JSON.stringify(useremail)
   const [users,setusers]=useState([])
   const usersrefdb=collection(db, 'users')
 
@@ -48,7 +49,29 @@ const ServiceScreen2 = ({route}) => {
     setvehicletype(d)
     setvehicleNo(e)
     setcity(f)
+  }
 
+  const checkbooking=(a,b,c,d,e,f)=>{
+    if(destination=='' || location=='' || Vehicletype=='' || 
+    vehicleNo=='' ||  City=='' || tod=='' ){
+        return (
+            <View><Text>No rides booked yet.</Text></View>
+
+        )
+    }
+    else{
+        rideBooked(a,b,c,d,e,f)
+    }
+  }
+
+  const cancelbooking=()=>{
+        setdestination('')
+        setlocation('')
+        settod('')
+        setvehicletype('')
+        setvehicleNo('')
+        setcity('')
+        alert("Booking cancelled!")
   }
   const delogger=()=>{
     handleLogout
@@ -58,13 +81,13 @@ const ServiceScreen2 = ({route}) => {
   
     return (
         <View style={styles.container}>
-          <Text style={{color: 'black'}}>User Email: </Text>
+          <Text style={{color: 'black'}}>User Email:{driverpassedID2} </Text>
           <SimpleLineIcons name="picture" color='black' size={44} />
           <Button title='Logout!' 
           onPress={delogger} />
           <Button title='Switch to driver!' 
           onPress={() => navigation.navigate(('Service'),{
-            useremail: user1
+            useremail: useremail
           })} />
         </View>
       );
@@ -81,13 +104,14 @@ function ViewRides() {
             return (
               
                 <View style={styles.container2}>
-                  <Text style={styles.style1}>Destination: {userinfo.destination} Location: {userinfo.location}  </Text>
+                  <Text style={styles.style1}>Driver ID: {userinfo.driverID}</Text>
+                  <Text style={styles.style1}>Destination: {userinfo.destination}   Location: {userinfo.location}  </Text>
                   <Text style={styles.style1}>Time of departure: {userinfo.tod} </Text>
                   <Text style={styles.style1}>vehicle: {userinfo.Vehicletype} No: {userinfo.vehicleNo} </Text>
                   <Text style={styles.style1}>City: {userinfo.City} </Text>
                   
                   <Button title='Book Ride'
-                    onPress={()=>{rideBooked(userinfo.destination, 
+                    onPress={()=>{checkbooking(userinfo.destination, 
                     userinfo.location, userinfo.tod ,userinfo.Vehicletype
                     ,userinfo.vehicleNo, userinfo.City)}}/>
                 </View>
@@ -99,6 +123,7 @@ function ViewRides() {
         );
         
       }
+
 
 function BookedRide() {
     if(destination=='' || location=='' || Vehicletype=='' || 
@@ -116,6 +141,10 @@ function BookedRide() {
                 <Text style={styles.style1}>Time of departure: {tod} </Text>
                 <Text style={styles.style1}>vehicle: {Vehicletype} No: {vehicleNo} </Text>
                 <Text style={styles.style1}>City: {City} </Text>
+                <Button 
+                title="Cancel Booking"
+                onPress={cancelbooking}
+                />
             </View>
         );
     }
