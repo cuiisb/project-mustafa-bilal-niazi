@@ -27,7 +27,7 @@ const ServiceScreen2 = ({route}) => {
     }
     getusers()
   }, [])
-
+  const [mydriverID,setmydriverID]=useState('')
   const [Vehicletype,setvehicletype]=useState('')
   const [vehicleNo,setvehicleNo]=useState('')
   const [City,setcity]=useState('')
@@ -52,10 +52,10 @@ const ServiceScreen2 = ({route}) => {
   }
 
   const checkbooking=(a,b,c,d,e,f)=>{
-    if(destination=='' || location=='' || Vehicletype=='' || 
-    vehicleNo=='' ||  City=='' || tod=='' ){
+    if(destination!='' || location!='' || Vehicletype!='' || 
+    vehicleNo!='' ||  City!='' || tod!='' ){
         return (
-            <View><Text>No rides booked yet.</Text></View>
+           alert("You already have a booking!")
 
         )
     }
@@ -111,7 +111,7 @@ function ViewRides() {
                   <Text style={styles.style1}>City: {userinfo.City} </Text>
                   
                   <Button title='Book Ride'
-                    onPress={()=>{checkbooking(userinfo.destination, 
+                    onPress={()=>{checkbooking(userinfo.driverID,userinfo.destination, 
                     userinfo.location, userinfo.tod ,userinfo.Vehicletype
                     ,userinfo.vehicleNo, userinfo.City)}}/>
                 </View>
