@@ -45,20 +45,18 @@ const LoginScreen = () => {
         behavior='padding'>
             <View>
                 
-                <TextInput
+                <TextInput style={[styles.style1,styles.input]}
                 placeholder='Email' placeholderTextColor='gray'
-                style={styles.style1}
                 value={getLoginemail}
                 onChangeText={text=> setLoginemail(text)}
-                style={styles.input}
+                
                 />
                 <View >
-                <TextInput
+                <TextInput style={[styles.style1,styles.input]}
                 placeholder='Password' placeholderTextColor='gray'
-                style={styles.style1} 
                 value={getLoginpassword}
                 onChangeText={text=> setLoginpassword(text)}
-                style={styles.input}
+                
                 secureTextEntry
                 />
                 

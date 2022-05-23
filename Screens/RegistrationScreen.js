@@ -59,27 +59,23 @@ const RegistrationScreen = () => {
         behavior='padding'>
             <View>
                 
-                <TextInput
+                <TextInput style={[styles.style1,styles.input]}
                 placeholder='User name' placeholderTextColor='gray'
-                style={styles.style1}
                 value={getname}
                 onChangeText={text=> setname(text)}
-                style={styles.input}
                 />
-                <TextInput
+                <TextInput style={[styles.style1,styles.input]}
                 placeholder='Email' placeholderTextColor='gray'
-                style={styles.style1}
                 value={getRegemail}
                 onChangeText={text=> setRegemail(text)}
-                style={styles.input}
+                
                 />
                 <View >
-                <TextInput
+                <TextInput style={[styles.style1,styles.input]}
                 placeholder='Password' placeholderTextColor='gray'
-                style={styles.style1}
                 value={getRegpassword}
                 onChangeText={text=> setRegpassword(text)}
-                style={styles.input}
+                
                 secureTextEntry
                 />
                   

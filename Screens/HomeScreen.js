@@ -1,7 +1,6 @@
 import React from 'react'
 import { TouchableOpacity,Button, StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/core'
-import { auth } from '../firebase'
 
 const HomeScreen = () => {
 
@@ -11,7 +10,7 @@ const HomeScreen = () => {
         
             <View style={styles.container}>
                 <Text style={styles.italic}>Hey! </Text>
-                <Text style={styles.italic}>looking for a sawaari?</Text>
+                <Text style={styles.italic}>Want to get fitter!??</Text>
                 <Text style={styles.italic}>and</Text>
                 <Text style={styles.italic}>Dont have an account?</Text>
                 <Text style={styles.italic}>Register now!</Text>

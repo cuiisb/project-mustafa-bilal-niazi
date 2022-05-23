@@ -7,7 +7,9 @@ import HomeScreen from './Screens/HomeScreen';
 import LoginScreen from './Screens/LoginScreen';
 import RegistrationScreen from './Screens/RegistrationScreen';
 import ServiceScreen from './Screens/ServiceScreen';
-import ServiceScreen2 from './Screens/ServiceScreen2';
+import mealplans from './Screens/mealplans';
+import workoutplans from './Screens/workoutplans';
+import trainer from './Screens/trainer';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -15,7 +17,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Home'>
         <Stack.Screen name="Home" component={HomeScreen} options={{
-      title: 'Saath Sawaar!',
+      title: 'Fitness Factor!',
       headerStyle: {
         backgroundColor: 'seagreen',
       },
@@ -27,7 +29,7 @@ export default function App() {
       } 
       } />
         <Stack.Screen name="Registration" component={RegistrationScreen} options={{
-      title: 'Register as a sawaar!',
+      title: 'Register to get fit!!',
       headerStyle: {
         backgroundColor: 'seagreen',
       },
@@ -40,7 +42,7 @@ export default function App() {
       },
       }}/>
         <Stack.Screen name="Login" component={LoginScreen} options={{
-      title: 'Welcome back sawaar!',
+      title: 'Welcome back!',
       headerStyle: {
         backgroundColor: 'seagreen',
       },
@@ -58,7 +60,21 @@ export default function App() {
           headerLeft: null
         },
       }}/>
-      <Stack.Screen name="Service2" component={ServiceScreen2} options={{
+      <Stack.Screen name="Meal" component={mealplans} options={{
+        headerShown: false,
+        navigationOptions:  {
+          headerLeft: null
+        },
+      
+      }}/>
+      <Stack.Screen name="Workouts" component={workoutplans} options={{
+        headerShown: false,
+        navigationOptions:  {
+          headerLeft: null
+        },
+      
+      }}/>
+      <Stack.Screen name="Trainer" component={trainer} options={{
         headerShown: false,
         navigationOptions:  {
           headerLeft: null

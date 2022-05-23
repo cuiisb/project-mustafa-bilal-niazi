@@ -21,7 +21,7 @@ function ServiceScreen  ({route}) {
   };
 
   const {useremail}=route.params;
-  const driverpassedID=JSON.stringify(useremail);
+  const userpassedID=JSON.stringify(useremail);
   const [users,setusers]=useState([])
   const usersrefdb=collection(db, 'users')
   
@@ -35,58 +35,9 @@ function ServiceScreen  ({route}) {
     getusers()
   }, [])
 
-  const [Vehicletype,setvehicletype]=useState('')
-  const [vehicleNo,setvehicleNo]=useState('')
-  const [City,setcity]=useState('')
-  const [tod,settod]=useState('')
-  const [location, setlocation] = useState('')
-  const [destination, setdestination] = useState('')
-  const [modalVisible, setModalVisible] = useState(false);
+  
 
-  const postData = async(a,b,c,d,e,f) => {
-    
-    await addDoc(usersrefdb , {
-        driverID: driverpassedID,
-        destination: a,
-        location: b,
-        Vehicletype: d,
-        vehicleNo: e,
-        City: f,
-        tod: c,
-    })
-    alert("Posted ride!")
-  };
 
-  const deleteData = async(id) => {
-    const userDoc=doc(db,'users', id)
-    await deleteDoc(userDoc)
-  };
-
-  const updateData = async(id,a,b,c,d,e,f) => {
-    const userDoc =doc(db, 'users', id)
-    const newFields= {
-      driverID: driverpassedID,
-      destination: a,
-      location: b,
-      Vehicletype: c,
-      vehicleNo: d,
-      City: e,
-      tod: f,
-    }
-    await updateDoc(userDoc, newFields)
-  };
-
-  const modalButton=(id, destination, location, Vehicletype, vehicleNo, City, tod)=>{
-    if((destination=='' || location=='' || Vehicletype=='' || 
-    vehicleNo=='' ||  City=='' || tod=='' )){
-      alert("Fields left empty")
-    }
-    else{
-      {updateData(id, destination, location, Vehicletype, vehicleNo, City, tod)}
-    setModalVisible(!modalVisible)
-    }
-    
-  }
 
   const [getUser, setUser]= useState({})
   onAuthStateChanged( auth, (currentUser) => {
@@ -99,253 +50,129 @@ function ServiceScreen  ({route}) {
     handleLogout
     {navigation.navigate('Login')}
   }
-
-
-
+  
   function Profile({navigation}) {
   
+    const [Weight,setWeight]=useState('')
+    const [Height,setHeight]=useState('')
+    const [BMI, setBMI]=useState('')
+    const [BMIresult, setBMIresult]=useState('')
+
+    const calculate = (height, weight) => {
+      //calculation
+      var result = (parseFloat(weight)*10000)/(parseFloat(height)*parseFloat(height));
+      result = result.toFixed(2);
+      setBMI(result)
+      //display result
+      if(result<18.5){
+         setBMIresult('Underweight')
+      }
+      else if(result>=18.5&&result<25){
+        setBMIresult('Normal weight')
+      }
+      else if(result>=25&&result<30){
+        setBMIresult('Overweight')
+      }
+      else if(result>=30){
+        setBMIresult('Obese')
+      }
+      else{
+         alert('Incorrect Input!');
+         setBMIresult('')
+         
+      }
+   }
+
     return (
         <View style={styles.container}>
           <View style={styles.container3}>
           <SimpleLineIcons name="picture" color='black' size={44} />
-          <Text style={{color: 'black', fontStyle: 'bold'}}>User Email: {driverpassedID}</Text>
+          <Text style={{color: 'black', fontStyle: 'bold'}}>User Email: {userpassedID}</Text>
+          <Text>Height</Text>
+          <TextInput style = {styles.input}
+               underlineColorAndroid = "transparent"
+               placeholder = "Height (Cm)"
+               autoCapitalize = "none"
+               value={Height}
+               onChangeText={text=> setHeight(text)}/>
+
+          <Text>Weight</Text>
+          <TextInput style = {styles.input}
+               underlineColorAndroid = "transparent"
+               placeholder = "Weight (Kg)"
+               autoCapitalize = "none"
+               value={Weight}
+               onChangeText={text=> setWeight(text)}/>
+
+          <TouchableOpacity
+              onPress={() => calculate(Height, Weight)}
+              style={[styles.button2,styles.buttonOutline,{marginTop:20},{width: 150}]}>
+                <Text style={styles.buttonText}>
+                  Calculate
+                </Text>
+              </TouchableOpacity>
+
+          <Text style = {styles.output112}>User Body Mass Index (BMI): {BMI}</Text>
+          <Text style = {styles.resultText}>{BMIresult}</Text>
+
+          <TouchableOpacity
+              onPress={() => {delogger}}
+              style={[styles.button2,styles.buttonOutline,{marginTop:20},{width: 150}]}>
+                <Text style={styles.buttonText}>
+                  Logout
+                </Text>
+              </TouchableOpacity>
+
           
-          <Button title='Logout!' 
-          onPress={delogger} />
-          <Button title='Switch to rider!' 
-          onPress={() => navigation.navigate(('Service2'),{
-            useremail: useremail
-          })} />
+          
           </View>
           
         </View>
       );
     }
 
-function ViewRides({navigation}) {
-  const [refreshing, setRefreshing] = React.useState(false);
+function Planner({navigation}) {
+  return (
+    <View style={styles.container}>
+        
+    <View style={styles.buttonContainer}>
+    <TouchableOpacity
+  onPress={() => navigation.navigate('Workouts')}
+  style={[styles.button2,styles.buttonOutline,{marginTop:20}]}>
+    <Text style={styles.buttonText}>
+        Workout Plans
+    </Text>
+    
+  </TouchableOpacity>
+  <Text style={styles.italic}>Or login to your account!</Text>
+  <TouchableOpacity
+  onPress={() => navigation.navigate('Meals')}
+  style={[styles.button2,styles.buttonOutline,{marginTop:20}]}>
+    <Text style={styles.buttonText}>
+        Meal Plans
+    </Text>
+  </TouchableOpacity>
+    </View>
 
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
-  }, []);
-
-  const [Vehicletype2,setvehicletype2]=useState('')
-  const [vehicleNo2,setvehicleNo2]=useState('')
-  const [City2,setcity2]=useState('')
-  const [tod2,settod2]=useState('')
-  const [location2, setlocation2] = useState('')
-  const [destination2, setdestination2] = useState('')
-      return (
-        <SafeAreaView style={styles.container}
-        behavior='padding'>
-          <ScrollView
-            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-                      
-
-        <View > 
-          {users.map((userinfo)=>{
-            if(userinfo.driverID==driverpassedID){
-
-            return (
-              
-                <View style={styles.container2}>
-                  <Text style={styles.style1}>Driver ID: {userinfo.driverID}</Text>
-                  <Text style={styles.style1}>Destination: {userinfo.destination} Location: {userinfo.location}  </Text>
-                  <Text style={styles.style1}>Time of departure: {userinfo.tod} </Text>
-                  <Text style={styles.style1}>vehicle: {userinfo.Vehicletype} No: {userinfo.vehicleNo} </Text>
-                  <Text style={styles.style1}>City: {userinfo.City} </Text>
-                  <Modal
-                    animationType="none"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => {
-                      alert("Not updated");
-                      setModalVisible(!modalVisible);
-                    }}
-                  >
-                    <View style={styles.centeredView}>
-                      <View style={styles.modalView}>
-                        <View>
-                      <TextInput
-                      placeholder='Location'
-                      style={styles.style1}
-                      value={location2}
-                      onChangeText={text=> setlocation2(text)}
-                      style={styles.input}
-                      
-                      />
-                      <TextInput
-                      placeholder='Destination'
-                      style={styles.style1}
-                      value={destination2}
-                      onChangeText={text=> setdestination2(text)}
-                      style={styles.input}
-                      
-                      />
-                      <TextInput
-                      placeholder='City'
-                      style={styles.style1}
-                      value={City2}
-                      onChangeText={text=> setcity2(text)}
-                      style={styles.input}
-                      
-                      />
-                      <TextInput
-                      placeholder='Time of departure'
-                      style={styles.style1}
-                      value={tod2}
-                      onChangeText={text=> settod2(text)}
-                      style={styles.input}
-                      
-                      />
-                      <TextInput
-                      placeholder='Vehicle Type'
-                      style={styles.style1}
-                      value={Vehicletype2}
-                      onChangeText={text=> setvehicletype2(text)}
-                      style={styles.input}
-                      
-                      />
-                      <TextInput
-                      placeholder='Vehicle id'
-                      style={styles.style1}
-                      value={vehicleNo2}
-                      onChangeText={text=> setvehicleNo2(text)}
-                      style={styles.input}
-                      
-                      /></View>
-                      <TouchableOpacity
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={()=>{modalButton(userinfo.id,destination2,location2,Vehicletype2,vehicleNo2,
-                          City2,tod2)}}
-                      >
-                        <Text style={styles.textStyle}>Update</Text>
-                      </TouchableOpacity>
-                      
-                      </View>
-                      <View>
-                        <Button
-                        title='Cancel'
-                        onPress={()=>setModalVisible(!modalVisible)}></Button>
-                      </View>
-                    </View>
-                  </Modal>
-                  <View style={{flexDirection: 'row'}}>
-                  <TouchableOpacity
-                    style={[styles.button, styles.buttonOpen]}
-                    onPress={() => setModalVisible(true)}
-                  >
-                    <Text style={styles.textStyle}>Edit information</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.button, styles.buttonOpen2]}
-                    onPress={()=>{deleteData(userinfo.id)}}
-                  >
-                    <Text style={styles.textStyle}>Delete Post</Text>
-                  </TouchableOpacity>
-                  
-                  </View>
-                  
-                </View>
-              
-             
-              
-            );}
-          })}
-        </View></ScrollView></SafeAreaView>
-          
-        );
+    
+</View>
+      
+    );
         
       }
 
-function PostRides({navigation}) {
-
-  const [Vehicletype1,setvehicletype1]=useState('')
-  const [vehicleNo1,setvehicleNo1]=useState('')
-  const [City1,setcity1]=useState('')
-  const [tod1,settod1]=useState('')
-  const [location1, setlocation1] = useState('')
-  const [destination1, setdestination1] = useState('')
-
-  const poster=(a,b,c,d,e,f)=>{
-
-    if(a=='' || b=='' || c=='' || 
-    d=='' ||  e=='' || f=='' ){
-      alert("You left some field(s) empty!")
-    }
-    else{
-      postData(a,b,c,d,e,f)
-    }
-  }
+function VRtrainer({navigation}) {
 
   return (
     <SafeAreaView style={styles.container}
         behavior='padding'>
             <View>
-              
-                
             <View style={{alignSelf:'center', width: '70%'}}>
 
 
-                <TextInput
-                placeholder='Location' placeholderTextColor='gray'
-                onChangeText={text=> setlocation1(text)}
-                value={location1}
-                style={styles.input}
                 
-                ></TextInput></View>
-                <View style={{alignSelf:'center', width: '70%'}}>
-                <TextInput
-                placeholder='Destination' placeholderTextColor='gray'
-                value={destination1}
-                onChangeText={text=> {setdestination1(text)}}
-                style={styles.input}
-                
-                ></TextInput></View>
-                <View style={{alignSelf:'center', width: '70%'}}>
-                <TextInput
-                placeholder='City' placeholderTextColor='gray'
-                value={City1}
-                onChangeText={text=> {setcity1(text)}}
-                style={styles.input}
-                
-                /></View>
-                <View style={{alignSelf:'center', width: '70%'}}>
-                <TextInput
-                placeholder='Time of departure' placeholderTextColor='gray'
-                value={tod1}
-                onChangeText={text=> {settod1(text)}}
-                style={styles.input}
-                
-                /></View>
-                <View style={{alignSelf:'center', width: '70%'}}>
-                <TextInput
-                placeholder='Vehicle Type' placeholderTextColor='gray'
-                value={Vehicletype1}
-                onChangeText={text=> {setvehicletype1(text)}}
-                style={styles.input}
-                
-                /></View>
-                <View style={{alignSelf:'center', width: '70%'}}>
-                <TextInput
-                placeholder='Vehicle id' placeholderTextColor='gray'
-                value={vehicleNo1}
-                onChangeText={text=> {setvehicleNo1(text)}}
-                style={styles.input}
-                
-                /></View>
-              <View style={{alignSelf:'center', width: '50%'}}>
-              <TouchableOpacity
-               onPress={()=>poster(destination1,location1,tod1,Vehicletype1,vehicleNo1,City1)}
-              style={[styles.button2,styles.buttonOutline,{marginTop:20}]}>
-                <Text  style={styles.buttonText}>
-                  Post!
-                </Text>
-              </TouchableOpacity>
-              </View>
-
-              </View>
+            </View>
+            </View>
         </SafeAreaView>
       
     );
@@ -357,11 +184,11 @@ function PostRides({navigation}) {
       
       <Tab.Navigator>
         
-      <Tab.Screen name="My Posted Rides" component={ViewRides} options={{
-          tabBarColor: 'green',
-          tabBarLabel: 'Posted Ride!',
+      <Tab.Screen name="Fitness Plans" component={Planner} options={{
+          tabBarActiveBackgroundColor: 'black',
+          tabBarLabel: 'Plans',
           tabBarIcon: () => (
-            <MaterialCommunityIcons name="car" color='red' size={26} />
+            <MaterialCommunityIcons name="heart-plus" color='red' size={26} />
           ),
           headerStyle: {
             backgroundColor: 'black',
@@ -371,7 +198,7 @@ function PostRides({navigation}) {
           headerTintColor: 'palegoldenrod',
         }}  />
       <Tab.Screen name="Profile" component={Profile} options={{
-          tabBarColor: 'yellow',
+          tabBarActiveBackgroundColor: 'black',
           tabBarLabel: 'Profile',
           tabBarIcon: () => (
             <MaterialCommunityIcons name="account" color='blue' size={26} />
@@ -382,12 +209,12 @@ function PostRides({navigation}) {
           headerTitleAlign: 'center',
           headerTintColor: 'palegoldenrod',
         }} />
-        <Tab.Screen name="Post Rides" component={PostRides} options={{
+        <Tab.Screen name="My Trainer" component={VRtrainer} options={{
           
-          tabBarColor: 'red',
-          tabBarLabel: 'Post ride!',
+          tabBarActiveBackgroundColor: 'black',
+          tabBarLabel: 'Virtual trainer',
           tabBarIcon: () => (
-            <MaterialCommunityIcons name="arrow-collapse-up" color='yellow' size={26} />
+            <MaterialCommunityIcons name="weight-lifter" color='yellow' size={26} />
           ),
           headerStyle: {
             
@@ -509,5 +336,48 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         fontSize: 16,
       },
+      input112: {
+        margin: 15,
+        height: 40,
+        borderWidth: 1,
+        padding: 10,
+     },
+     submitButton: {
+        backgroundColor: '#ff6666',
+        padding: 10,
+        margin: 15,
+        height: 40,
+     },
+     submitButtonText:{
+        textAlign: "center",
+        color: 'white',
+        fontSize: 18,
+     },
+     output112:{
+        textAlign: "center",
+        fontSize: 20,
+     },
+     title:{
+        paddingTop:30,
+        paddingBottom:10,
+        textAlign: "center",
+        fontSize: 30,
+        fontWeight:"bold",
+     },
+     resultText:{
+        paddingTop:20,
+        paddingBottom:10,
+        textAlign: "center",
+        fontSize: 30,
+        color: 'red'
+     },
+     label:{
+        marginLeft: 15,
+     },
+     containernew: {
+      flex: 1,
+      backgroundColor: 'khaki',
+      justifyContent: 'center',
+    },
   });
 

@@ -96,7 +96,7 @@ const ServiceScreen2 = ({route}) => {
       );
     }
 
-function ViewRides() {
+function Planner() {
 
       return (
         <SafeAreaView style={styles.containernew}
@@ -178,7 +178,7 @@ function BookedRide() {
     return (
       
       <Tab.Navigator>
-      <Tab.Screen name="Available Rides!" component={ViewRides} options={{
+      <Tab.Screen name="Available Rides!" component={Planner} options={{
           tabBarColor: 'green',
           tabBarLabel: 'Posted Rides!',
           tabBarIcon: () => (
