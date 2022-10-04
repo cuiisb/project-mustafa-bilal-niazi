@@ -10,14 +10,17 @@ const workoutplans = () => {
 
   return (
         
-    <View style={styles.container2}>
+    <View style={styles.container}>
                   <Text style={styles.style1}>workoutplans </Text>
                   
                   <Pressable
+                  
                     style={[styles.button, styles.buttonOpen2]}
                     onPress={() => navigation.navigate('Service')}
                   >
+                    <Text style={styles.style1}>                         </Text>
                     <Text style={styles.textStyle}>back</Text>
+                    
                   </Pressable>
                   
                 </View>
